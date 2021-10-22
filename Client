@@ -1,0 +1,64 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.*;
+import java.util.Scanner;
+import java.lang.Thread;
+
+
+public class Client {
+
+    // TODO: TEST
+    private static final int SERVER_PORT = 312;
+
+    // TODO: Need command line arguments for IP Address and Port Number
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        // TODO: TEST
+        System.out.print("Enter the Hostname: ");
+
+
+        // Grab the server IP Address
+        String SERVER_IP = scanner.next();
+
+        // Create socket with server IP Address and port number
+        Socket socket = new Socket(SERVER_IP, SERVER_PORT);
+
+        BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
+
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+        String serverResponse;
+
+        while((serverResponse = input.readLine()) != null) {
+            System.out.println(serverResponse);
+            if(serverResponse.contains("*")){
+                break;
+            }
+        }
+        while(true) {
+
+
+            System.out.print("> ");
+            String command = keyboard.readLine();
+
+            out.println(command);
+            while((serverResponse = input.readLine()) != null) {
+                System.out.println(serverResponse);
+                if(serverResponse.contains("*")){
+                    break;
+                }
+            }
+
+            if(serverResponse == null)
+                break;
+        }
+
+        socket.close();
+        System.exit(0);
+
+    }// end main
+}// end Client class

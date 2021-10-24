@@ -20,40 +20,49 @@ public class Client implements Runnable {
         // a queue to hold threads and remove them as called
         Queue<Thread> clientQueue = new LinkedList<Thread>();
 
-        // menu for the user
-        System.out.println("Choose from menu options");
-        System.out.println("1. Date and time");
-        System.out.println("2. Uptime");
-        System.out.println("3. Memory use");
-        System.out.println("4. Netstat");
-        System.out.println("5. Current Users");
-        System.out.println("6. Running Processes");
-        System.out.println("7. Exit");
-        System.out.print("> ");
-        command = scanner.nextLine();
+        while(command != "7") {
 
-        // how many threads will be needed
-        System.out.println("\nHow many requests would you like to run? (Please select from 1, 5, 10, 15, 20, or 25)");
-        int requestAmount = scanner.nextInt();
+            // menu for the user
+            System.out.println("Choose from menu options");
+            System.out.println("1. Date and time");
+            System.out.println("2. Uptime");
+            System.out.println("3. Memory use");
+            System.out.println("4. Netstat");
+            System.out.println("5. Current Users");
+            System.out.println("6. Running Processes");
+            System.out.println("7. Exit");
+            System.out.print("> ");
+            command = scanner.nextLine();
 
-        // test for a correct amount of threads
-        while(requestAmount != 1 && requestAmount != 5 && requestAmount != 10 && requestAmount != 15 && requestAmount != 20 && requestAmount != 25) {
-            System.out.println("\nInvalid entry, please enter either 1, 5, 10, 15, 20, or 25:");
-            requestAmount = scanner.nextInt();
-        }
-        // TODO: TEST
-        System.out.println(command);
+            // TODO: Need to check user input for correct commands
 
-        // filling queue with threads
-        for(int i = 0; i < requestAmount; i++) {
-            // TODO: Come back when client class is made
-            clientQueue.add(new Thread(new Client(i)));
-        }
+            // If user chooses 7, quit program
+            if (command.equals("7")) {
+                break;
+            }
 
-        // Calling the Threads from the queue
-        for(int j = 0; j < requestAmount; j++) {
-            clientQueue.poll().start();
-        }
+            // how many threads will be needed
+            System.out.println("\nHow many requests would you like to run? (Please select from 1, 5, 10, 15, 20, or 25)");
+            int requestAmount = scanner.nextInt();
+
+            // test for a correct amount of threads
+            while (requestAmount != 1 && requestAmount != 5 && requestAmount != 10 && requestAmount != 15 && requestAmount != 20 && requestAmount != 25) {
+                System.out.println("\nInvalid entry, please enter either 1, 5, 10, 15, 20, or 25:");
+                requestAmount = scanner.nextInt();
+            }
+
+
+            // filling queue with threads
+            for (int i = 0; i < requestAmount; i++) {
+                // TODO: Come back when client class is made
+                clientQueue.add(new Thread(new Client(i)));
+            }
+
+            // Calling the Threads from the queue
+            for (int j = 0; j < requestAmount; j++) {
+                clientQueue.poll().start();
+            }
+        }// end of while loop
 
         // Grab the server IP Address
         // TODO: Wont be necessary, need command line arguments
@@ -124,6 +133,7 @@ public class Client implements Runnable {
 //            System.out.println("Not working");
 //            System.exit(1);
 //        }
+
     }// end main
 
     public Client(int value) {
@@ -131,7 +141,6 @@ public class Client implements Runnable {
     }
 
     // Runs as many times as the user asks for
-    @Override
     public void run() {
         try {
             // start time for client request
@@ -139,6 +148,7 @@ public class Client implements Runnable {
 
             // Create socket with server IP Address and port number
             // TODO: Test, need to get rid of host IP for later
+            // TODO: You need to type in your own IP Address
             Socket socket = new Socket("192.168.1.84", SERVER_PORT);
 
             // Pulling the menu from the server
@@ -154,7 +164,8 @@ public class Client implements Runnable {
 
 
 
-            String serverResponse;
+            String serverResponse = "";
+            System.out.println(serverResponse);
 
 
 

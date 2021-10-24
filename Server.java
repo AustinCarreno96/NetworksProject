@@ -2,7 +2,8 @@ import java.io.*;
 import java.net.*;
 import java.util.Date;
 
-public class Server {
+public class Server implements Runnable{
+    private Socket sock;
     private static PrintWriter out;
 
     public static void exec(String cmd) throws IOException{
@@ -23,7 +24,7 @@ public class Server {
         long start = System.currentTimeMillis();
 
         ServerSocket listener = new ServerSocket(port);
-        System.out.println("Connceting to client");
+        System.out.println("Connecting to client");
 
         // Listening for Client
         Socket client = listener.accept();
@@ -35,14 +36,14 @@ public class Server {
         System.out.println("Connection established");
 
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        menu(out);
 
         try {
             while (true) {
                 request = in.readLine();
                 switch(request) {
                     case "1":
-                        exec("date");
+//                        exec("date");
+                        out.println("Server Test");
                         break;
 
                     case "2":
@@ -70,63 +71,20 @@ public class Server {
                         listener.close();
 
                     default:
-                        System.out.println("Invalid option, please try again: ");
+                        out.println("Invalid option, please try again: ");
                         request = in.readLine();
                 }
-//                if (isValidCommand(request)) {
-//                    if (request.equals("1")) {
-//                        exec("date");
-//                    }
-//
-//                    if (request.equals("2")) {
-//                        exec("uptime");
-//                    }
-//
-//                    if (request.equals("3")) {
-//                        exec("free");
-//                    }
-//
-//                    if (request.equals("4")) {
-//                        exec("netstat");
-//                    }
-//
-//                    if (request.equals("5")) {
-//                        exec("who");
-//                    }
-//
-//                    if (request.equals("6")) {
-//                        exec("ps -e");
-//                    }
-//
-//                    if (request.equals("7")) {
-//                        client.close();
-//                        listener.close();
-//                        break;
-//                    }
-//                } else {
-//                    out.println("Invalid opperation");
-//                }
             }
         } catch(SocketException e){
             System.out.println("Connection terminated");
         }
 
-        System.out.println("Client disconected");
+        System.out.println("Client disconnected");
         client.close();
         listener.close();
 
     }
-    public static void menu(PrintWriter out){
-        out.println("Choose from menu options");
-        out.println("1. Date and time");
-        out.println("2. Uptime");
-        out.println("3. Memory use");
-        out.println("4. Netstat");
-        out.println("5. Current Users");
-        out.println("6. Running Processes");
-        out.println("7. Exit");
 
-    }
     public static boolean isValidCommand(String command){
         if(command == null);
         return command.equals("1") || command.equals("2") || command.equals("3") || command.equals("4") || command.equals("5") || command.equals("6") || command.equals("7");
